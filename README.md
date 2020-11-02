@@ -3,4 +3,6 @@
 Classification of Ukiyoe by artist
 
 # Dataset
-https://www.kaggle.com/kengoichiki/the-metropolitan-museum-of-art-ukiyoe-dataset
+https://prob.space/competitions/ukiyoe-author
+
+original data ( https://www.kaggle.com/kengoichiki/the-metropolitan-museum-of-art-ukiyoe-dataset )
