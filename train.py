@@ -11,7 +11,7 @@ from dataLoader import DataLoader
 
 if __name__ == '__main__':
 	ENABLE_SAVE_MODEL = True
-	MODEL_NAME = 'final_model'
+	MODEL_NAME = 'mini'
 	# 4 mnist
 	# H, W, C = 28, 28, 1
 	# (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
