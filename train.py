@@ -19,8 +19,6 @@ if __name__ == '__main__':
 	H, W, C = 224, 224, 3
 	RH, RW = 224, 224
 	x_train, y_train, x_test, y_test = DataLoader(0.2).load(DATA_PATH)
-	# x_train = tf.image.resize_with_pad(x_train, RH, RW)
-	# x_test = tf.image.resize_with_pad(x_test, RH, RW)
 	if C == 1:
 		x_train = np.sum(x_train, axis=-1) / 3
 		x_test = np.sum(x_test, axis=-1) / 3
@@ -65,6 +63,7 @@ if __name__ == '__main__':
 
 
 	def train(model, x_train, y_train, epochs, batch_size):
+		x_train = data_remake_per_train(x_train)
 		ds_train = tf.data.Dataset.from_tensor_slices((x_train, y_train)).shuffle(1000).batch(batch_size)
 		for epoch in range(epochs):
 			for batch_num, (images, labels) in enumerate(ds_train):
@@ -97,5 +96,10 @@ if __name__ == '__main__':
 			x = resize(x)
 		x = tfa.image.gaussian_filter2d(x)
 		return x
+
+	def data_remake_per_train(x):
+		x = tf.image.random_brightness(x, 0.2)
+		return x
+
 
 	train(model, data_remake(x_train), y_train, epochs=10, batch_size=32)
