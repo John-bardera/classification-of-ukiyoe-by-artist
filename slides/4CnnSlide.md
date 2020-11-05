@@ -5,6 +5,7 @@ marp: true
 theme: uncover
 size: 16:9
 paginate: false
+headingDivider: 2
 style: |
     section {
         background-color: #333333;
@@ -14,9 +15,9 @@ style: |
         "Hiragino Sans",
         Meiryo,
         sans-serif;
-        font-size: 40px;
+        font-size: 32px;
         color: #e0e0e0;
-        text-align: start;
+        text-align: left;
     }
     h1 {
         text-align: center;
@@ -26,25 +27,45 @@ style: |
         display: block;
         position: fixed;
         top: 64px;
-        font-size: 56px;
+        font-size: 48px;
     }
-    section.center {
-        text-align: center;
+    p {
+        margin: 0;
     }
     ul {
         margin-left: 0;
     }
     li, ol {
-        margin: 24px;
+        margin: 16px;
     }
-headingDivider: 2
+    .katex {
+    }
+    section.center {
+        text-align: center;
+    }
+    section.right_bottom {
+        background-position: right bottom;
+        background-repeat: no-repeat;
+    }
+    section.right_top {
+        background-position: right top;
+        background-repeat: no-repeat;
+    }
+    section.left_bottom {
+        background-position: left bottom;
+        background-repeat: no-repeat;
+    }
+    section.left_top {
+        background-position: left 40px top 40px;
+        background-repeat: no-repeat;
+    }
 -->
 # 第5回データ解析ゼミ
 
 # tensorflow2系を用いたCNNの実装
 ## はじめに
 <!-- _class: center -->
-**Mac book proじゃメモリがたりねぇ！！**
+**Mac book proじゃリソースがたりねぇ！！**
 
 # データセットについて
 ## データセット
@@ -152,6 +173,36 @@ Epoch 8時点
 - 学習がうまくいってない or テストケースが少なすぎる
     - テストケースをBatch Sizeで分割して、LossとAccuracyはそれらの平均とすれば良いのか
 
-## 結果が出るまで
-<!-- _class: center -->
-**プロテイン入りのカレーを作っていました**
+## 実装(割と最後)
+- テストケースをBatch Sizeで分割して、LossとAccuracyをそれらの平均とする
+- それ以外同じ
+
+## 結果(割と最後)
+- 変わらんかったわ
+
+## 考察(割と最後)
+- 今までが調子良かっただけでAccuracyの違い、これが普通説
+
+## 実装(最後)
+- Epochぶち上げ
+- Epoch毎のModel保存機能追加
+
+## 構成(最後)
+- Conv4層(64 -> 128 -> 256 -> 512)
+- 全結合層4層(512 -> 1024 -> 512 -> 256)
+
+## 結果(最後)
+- accuracy: 30.88%
+- loss: 6.11
+- どうすればaccuracyあげれるのかわからない
+![fit](epoch32.png)
+
+## 考察(最後)
+- 僕が思ってたほど、これは複雑なモデルが必要ない問題なのではないだろうか
+
+# まとめ
+## まとめ
+- リソースが足りない！
+- blurはすごい！(気がする)
+- 時間がない！
+- Self-Atttensionとか実装してみたかった
