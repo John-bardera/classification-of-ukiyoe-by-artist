@@ -10,6 +10,8 @@ from dataLoader import DataLoader
 
 
 if __name__ == '__main__':
+	ENABLE_SAVE_MODEL = True
+	MODEL_NAME = 'final_model'
 	# 4 mnist
 	# H, W, C = 28, 28, 1
 	# (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
@@ -93,6 +95,9 @@ if __name__ == '__main__':
 				f'Loss: {sum(losses) / len(losses)}, '
 				f'Accuracy: {sum(accuracies) / len(accuracies)}'
 			)
+			# save model phase
+			tf.saved_model.save(model, f'model/{MODEL_NAME}_epoch{epoch + 1}')
+
 		train_loss.reset_states()
 		train_accuracy.reset_states()
 
@@ -109,5 +114,5 @@ if __name__ == '__main__':
 		x = tf.image.random_brightness(x, 0.16)
 		return x
 
-	train(model, data_remake(x_train), y_train, data_remake(x_test), y_test, epochs=8, batch_size=32)
-	tf.saved_model.save(model, 'model/my_model')
+	train(model, data_remake(x_train), y_train, data_remake(x_test), y_test, epochs=32, batch_size=32)
+	tf.saved_model.save(model, f'model/{MODEL_NAME}')
