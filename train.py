@@ -18,7 +18,7 @@ if __name__ == '__main__':
 	DATA_PATH = './data/'
 	H, W, C = 224, 224, 3
 	RH, RW = 224, 224
-	x_train, y_train, x_test, y_test = DataLoader(0.2).load(DATA_PATH)
+	x_train, y_train, x_test, y_test = DataLoader(128).load(DATA_PATH)
 	if C == 1:
 		x_train = np.sum(x_train, axis=-1) / 3
 		x_test = np.sum(x_test, axis=-1) / 3
@@ -62,10 +62,11 @@ if __name__ == '__main__':
 		test_accuracy(t, test_pred)
 
 
-	def train(model, x_train, y_train, epochs, batch_size):
-		x_train = data_remake_per_train(x_train)
-		ds_train = tf.data.Dataset.from_tensor_slices((x_train, y_train)).shuffle(1000).batch(batch_size)
+	def train(model, x_train, y_train, x_test, y_test, epochs, batch_size):
 		for epoch in range(epochs):
+			# train phase
+			x_train = data_remake_per_train(x_train)
+			ds_train = tf.data.Dataset.from_tensor_slices((x_train, y_train)).shuffle(1000).batch(batch_size)
 			for batch_num, (images, labels) in enumerate(ds_train):
 				if batch_num % 10 == 0:
 					timef = time.time()
@@ -78,6 +79,7 @@ if __name__ == '__main__':
 						f'Loss: {train_loss.result()}, '
 						f'Accuracy: {train_accuracy.result() * 100}'
 					)
+			# test phase
 			test_step(x_test, y_test)
 			tf.print(
 				f'---Test Result---\n'
@@ -98,8 +100,8 @@ if __name__ == '__main__':
 		return x
 
 	def data_remake_per_train(x):
-		x = tf.image.random_brightness(x, 0.2)
+		x = tf.image.random_brightness(x, 0.16)
 		return x
 
-
-	train(model, data_remake(x_train), y_train, epochs=10, batch_size=32)
+	train(model, data_remake(x_train), y_train, data_remake(x_test), y_test, epochs=8, batch_size=32)
+	tf.saved_model.save(model, 'model/my_model')
