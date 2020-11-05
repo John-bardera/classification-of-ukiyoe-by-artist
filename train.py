@@ -3,6 +3,8 @@
 import time
 import numpy as np
 import tensorflow as tf
+import tensorflow_addons as tfa
+
 from myModel import MyModel
 from dataLoader import DataLoader
 
@@ -66,12 +68,11 @@ if __name__ == '__main__':
 		ds_train = tf.data.Dataset.from_tensor_slices((x_train, y_train)).shuffle(1000).batch(batch_size)
 		for epoch in range(epochs):
 			for batch_num, (images, labels) in enumerate(ds_train):
-				timef = time.time()
-				if H != RH:
-					images = resize(images)
-				train_step(images, labels)
-				timet = time.time()
 				if batch_num % 10 == 0:
+					timef = time.time()
+				train_step(images, labels)
+				if batch_num % 10 == 9:
+					timet = time.time()
 					tf.print(
 						f'Epoch-Batch: {epoch + 1}-{batch_num + 1}, '
 						f'Time: {"{:.2f}".format(timet - timef)}s, '
@@ -91,4 +92,10 @@ if __name__ == '__main__':
 	def resize(images):
 		return tf.image.resize(images, [RH, RW])
 
-	train(model, x_train, y_train, epochs=10, batch_size=32)
+	def data_remake(x):
+		if H != RH:
+			x = resize(x)
+		x = tfa.image.gaussian_filter2d(x)
+		return x
+
+	train(model, data_remake(x_train), y_train, epochs=10, batch_size=32)
