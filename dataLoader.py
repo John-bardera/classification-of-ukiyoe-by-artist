@@ -25,7 +25,10 @@ class DataLoader(object):
 		all_labels = all_labels[perm_idx]
 
 		# split train and validation
-		validation_num = int(len(all_labels) * self.validation_size)
+		if self.validation_size < 1:
+			validation_num = int(len(all_labels) * self.validation_size)
+		else:
+			validation_num = int(self.validation_size)
 
 		validation_images = all_images[:validation_num]
 		validation_labels = all_labels[:validation_num]
