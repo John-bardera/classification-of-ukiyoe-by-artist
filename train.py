@@ -18,7 +18,7 @@ if __name__ == '__main__':
 	DATA_PATH = './data/'
 	H, W, C = 224, 224, 3
 	RH, RW = 224, 224
-	x_train, y_train, x_test, y_test = DataLoader(128).load(DATA_PATH)
+	x_train, y_train, x_test, y_test = DataLoader(0.2).load(DATA_PATH)
 	if C == 1:
 		x_train = np.sum(x_train, axis=-1) / 3
 		x_test = np.sum(x_test, axis=-1) / 3
@@ -80,12 +80,18 @@ if __name__ == '__main__':
 						f'Accuracy: {train_accuracy.result() * 100}'
 					)
 			# test phase
-			test_step(x_test, y_test)
+			losses = []
+			accuracies = []
+			ds_train = tf.data.Dataset.from_tensor_slices((x_test, y_test)).shuffle(1000).batch(batch_size)
+			for images, labels in ds_train:
+				test_step(images, labels)
+				losses.append(test_loss.result())
+				accuracies.append(test_accuracy.result() * 100)
 			tf.print(
 				f'---Test Result---\n'
 				f'Epoch: {epoch + 1}, '
-				f'Loss: {test_loss.result()}, '
-				f'Accuracy: {test_accuracy.result() * 100}'
+				f'Loss: {sum(losses) / len(losses)}, '
+				f'Accuracy: {sum(accuracies) / len(accuracies)}'
 			)
 		train_loss.reset_states()
 		train_accuracy.reset_states()
